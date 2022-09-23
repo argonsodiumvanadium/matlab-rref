@@ -3,27 +3,6 @@ function [] = main ()
     myRref([0 1 0; 3 4 0; 6 7 0; 0 1 0; -2 9 3]);
 end
 
-%-- this is for row swapping operations such as R1 <-> R2 --%
-function [newMatrix] = swap(matrix, rowIndex1, rowIndex2) 
-    temp = matrix(rowIndex1,:);
-    matrix(rowIndex1,:) = matrix(rowIndex2,:);
-    matrix(rowIndex2,:) = temp;
-    newMatrix = matrix;
-end
-
-%-- this is for creating 0s in the other elements in a column of a matrix, requires --%
-%-- the nullifyingRow to have a pivot                                               --%
-function [newMatrix] = nullify (matrix, nullifyingRow, targetRow, factor) 
-    matrix(targetRow,:) = matrix(targetRow,:) - matrix(nullifyingRow,:) * factor;
-    newMatrix = matrix;
-end
-
-%-- basically divides a row by a number, useful to create pivot elements --% 
-function [newMatrix] = normalise (matrix, row, factor)
-    matrix(row,:) = matrix(row,:) / factor;
-    newMatrix = matrix;
-end
-
 %-- main function --%
 function [rrefMatrix] = myRref (matrix)
     for row = 1:size(matrix,1)
@@ -37,6 +16,12 @@ function [rrefMatrix] = myRref (matrix)
     end
     matrix = swapToRref(matrix);
     matrix
+end
+
+%-- basically divides a row by a number, useful to create pivot elements --% 
+function [newMatrix] = normalise (matrix, row, factor)
+    matrix(row,:) = matrix(row,:) / factor;
+    newMatrix = matrix;
 end
 
 %-- This function is used to basically ensure the pivot columns are filled with 0s --%
@@ -54,6 +39,13 @@ function [nullifiedMatrix] =  nullifyColumns (matrix, rowIndex, columnIndex)
     nullifiedMatrix = matrix;
 end
 
+%-- this is for creating 0s in the other elements in a column of a matrix, requires --%
+%-- the nullifyingRow to have a pivot                                               --%
+function [newMatrix] = nullify (matrix, nullifyingRow, targetRow, factor) 
+    matrix(targetRow,:) = matrix(targetRow,:) - matrix(nullifyingRow,:) * factor;
+    newMatrix = matrix;
+end
+
 %-- basically swap to ensure all pivots are on the left of the previous pivot --%
 function [finalMatrix] = swapToRref (matrix)
     rowToBeSwapped = 1;
@@ -68,3 +60,12 @@ function [finalMatrix] = swapToRref (matrix)
        
     finalMatrix = matrix;
 end
+
+%-- this is for row swapping operations such as R1 <-> R2 --%
+function [newMatrix] = swap(matrix, rowIndex1, rowIndex2) 
+    temp = matrix(rowIndex1,:);
+    matrix(rowIndex1,:) = matrix(rowIndex2,:);
+    matrix(rowIndex2,:) = temp;
+    newMatrix = matrix;
+end
+
